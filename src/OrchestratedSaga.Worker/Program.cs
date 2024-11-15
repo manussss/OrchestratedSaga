@@ -24,6 +24,13 @@ var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
         e.UseMessageRetry(p => p.Interval(3, 100));
         e.Consumer<BookFlightListener>();
     });
+
+    cfg.ReceiveEndpoint("orchestrator", e =>
+    {
+        e.PrefetchCount = 10;
+        e.UseMessageRetry(p => p.Interval(3, 100));
+        e.Consumer<OrchestratorListener>();
+    });
 });
 
 var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
