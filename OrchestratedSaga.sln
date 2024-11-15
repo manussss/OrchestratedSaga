@@ -10,8 +10,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docker", "docker", "{29AE7D
 		docker\docker-compose.yml = docker\docker-compose.yml
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrchestratedSaga.Core", "src\OrchestratedSaga.Core\OrchestratedSaga.Core.csproj", "{10B33CFC-0CED-4A7B-87B5-0CAB3FB2B5AF}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10B33CFC-0CED-4A7B-87B5-0CAB3FB2B5AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10B33CFC-0CED-4A7B-87B5-0CAB3FB2B5AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10B33CFC-0CED-4A7B-87B5-0CAB3FB2B5AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10B33CFC-0CED-4A7B-87B5-0CAB3FB2B5AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{10B33CFC-0CED-4A7B-87B5-0CAB3FB2B5AF} = {32E9863B-3929-49E5-88B7-7C5596C2B6ED}
 	EndGlobalSection
 EndGlobal
