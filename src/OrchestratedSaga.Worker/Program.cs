@@ -10,6 +10,13 @@ var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
         e.UseMessageRetry(p => p.Interval(3, 100));
         e.Consumer<CreateBookCarListener>();
     });
+
+    cfg.ReceiveEndpoint("book-hotel", e =>
+    {
+        e.PrefetchCount = 10;
+        e.UseMessageRetry(p => p.Interval(3, 100));
+        e.Consumer<CreateBookHotelListener>();
+    });
 });
 
 var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
