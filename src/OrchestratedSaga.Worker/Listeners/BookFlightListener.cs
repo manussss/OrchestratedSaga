@@ -2,25 +2,16 @@
 
 public class BookFlightListener : IConsumer<BookFlightMessage>
 {
-    private readonly ILogger<BookFlightListener> _logger;
     private readonly IAction _action;
 
-    public BookFlightListener(
-        ILogger<BookFlightListener> logger,
-        [FromKeyedServices(nameof(BookFlightAction))] IAction action)
+    public BookFlightListener(IServiceProvider serviceProvider)
     {
-        _logger = logger;
-        _action = action;
-    }
-
-    public BookFlightListener()
-    {
-
+        _action = serviceProvider.GetRequiredKeyedService<IAction>(nameof(BookFlightAction));
     }
 
     public async Task Consume(ConsumeContext<BookFlightMessage> context)
     {
-        _logger.LogInformation("Processing {Event}", nameof(BookFlightMessage));
+        Serilog.Log.Information("{Class} | Processing {Event}", nameof(BookFlightListener), nameof(BookFlightMessage));
 
         var message = context.Message;
 

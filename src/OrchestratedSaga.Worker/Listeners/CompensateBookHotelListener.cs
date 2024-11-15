@@ -2,25 +2,16 @@
 
 public class CompensateBookHotelListener : IConsumer<CancelBookHotelMessage>
 {
-    private readonly ILogger<CompensateBookHotelListener> _logger;
     private readonly IAction _action;
 
-    public CompensateBookHotelListener(
-        ILogger<CompensateBookHotelListener> logger,
-        [FromKeyedServices(nameof(BookHotelAction))] IAction action)
+    public CompensateBookHotelListener(IServiceProvider serviceProvider)
     {
-        _logger = logger;
-        _action = action;
-    }
-
-    public CompensateBookHotelListener()
-    {
-
+        _action = serviceProvider.GetRequiredKeyedService<IAction>(nameof(BookHotelAction));
     }
 
     public async Task Consume(ConsumeContext<CancelBookHotelMessage> context)
     {
-        _logger.LogInformation("Processing {Event}", nameof(CancelBookHotelMessage));
+        Serilog.Log.Information("{Class} | Processing {Event}", nameof(CompensateBookHotelListener), nameof(CancelBookHotelMessage));
 
         var message = context.Message;
 

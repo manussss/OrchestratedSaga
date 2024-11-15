@@ -4,6 +4,7 @@ builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddMassTransitInjection(builder.Configuration);
 builder.Services.AddRepositoriesInjection();
+builder.Services.AddLogging();
 
 var app = builder.Build();
 

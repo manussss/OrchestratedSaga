@@ -7,3 +7,7 @@ global using Microsoft.Extensions.Logging;
 global using OrchestratedSaga.Core.Entities;
 global using OrchestratedSaga.Core.Repositories;
 global using OrchestratedSaga.Core.Actions;
+global using Serilog;
+global using Serilog.Events;
+global using Serilog.Exceptions;
+global using Serilog.Filters;

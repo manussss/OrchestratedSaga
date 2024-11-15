@@ -2,25 +2,16 @@
 
 public class CompensateBookCarListener : IConsumer<CancelBookCarMessage>
 {
-    private readonly ILogger<CompensateBookCarListener> _logger;
     private readonly IAction _action;
 
-    public CompensateBookCarListener(
-        ILogger<CompensateBookCarListener> logger,
-        [FromKeyedServices(nameof(BookCarAction))] IAction action)
+    public CompensateBookCarListener(IServiceProvider serviceProvider)
     {
-        _logger = logger;
-        _action = action;
-    }
-
-    public CompensateBookCarListener()
-    {
-
+        _action = serviceProvider.GetRequiredKeyedService<IAction>(nameof(BookCarAction));
     }
 
     public async Task Consume(ConsumeContext<CancelBookCarMessage> context)
     {
-        _logger.LogInformation("Processing {Event}", nameof(CancelBookCarMessage));
+        Serilog.Log.Information("{Class} | Processing {Event}", nameof(CompensateBookCarListener), nameof(CancelBookCarMessage));
 
         var message = context.Message;
 

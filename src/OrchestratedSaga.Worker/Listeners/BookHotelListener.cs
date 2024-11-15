@@ -2,25 +2,16 @@
 
 public class BookHotelListener : IConsumer<BookHotelMessage>
 {
-    private readonly ILogger<BookHotelListener> _logger;
     private readonly IAction _action;
 
-    public BookHotelListener(
-        ILogger<BookHotelListener> logger,
-        [FromKeyedServices(nameof(BookHotelAction))] IAction action)
+    public BookHotelListener(IServiceProvider serviceProvider)
     {
-        _logger = logger;
-        _action = action;
-    }
-
-    public BookHotelListener()
-    {
-        
+        _action = serviceProvider.GetRequiredKeyedService<IAction>(nameof(BookHotelAction));
     }
 
     public async Task Consume(ConsumeContext<BookHotelMessage> context)
     {
-        _logger.LogInformation("Processing {Event}", nameof(BookHotelMessage));
+        Serilog.Log.Information("{Class} | Processing {Event}", nameof(BookHotelListener), nameof(BookHotelMessage));
 
         var message = context.Message;
 
