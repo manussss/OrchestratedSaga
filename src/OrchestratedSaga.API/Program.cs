@@ -17,7 +17,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapPost("api/v1/message", async (
-    [FromBody] BookCarMessage message,
     [FromServices] IPublishEndpoint publisher,
     [FromServices] IBookingTravelRepository bookingTravelRepository,
     [FromServices] ILogger<Program> logger) =>
@@ -36,6 +35,18 @@ app.MapPost("api/v1/message", async (
     logger.LogInformation("Event sent {Event}", nameof(BookCarMessage));
 
     return TypedResults.Ok();
+});
+
+app.MapGet("api/v1/message/{id}", async (
+    [FromServices] IBookingTravelRepository bookingTravelRepository,
+    Guid id) =>
+{
+    var bookingTravel = await bookingTravelRepository.GetByIdAsync(id);
+
+    if (bookingTravel == null)
+        return Results.NotFound();
+
+    return Results.Ok(bookingTravel);
 });
 
 app.Run();
