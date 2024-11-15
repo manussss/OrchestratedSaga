@@ -2,3 +2,8 @@
 global using MassTransit;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
+global using OrchestratedSaga.Core.Messages.Models;
+global using Microsoft.Extensions.Logging;
+global using OrchestratedSaga.Core.Entities;
+global using OrchestratedSaga.Core.Repositories;
+global using OrchestratedSaga.Core.Actions;
