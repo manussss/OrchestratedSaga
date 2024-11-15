@@ -31,6 +31,27 @@ var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
         e.UseMessageRetry(p => p.Interval(3, 100));
         e.Consumer<OrchestratorListener>();
     });
+
+    cfg.ReceiveEndpoint("compensate-book-car", e =>
+    {
+        e.PrefetchCount = 10;
+        e.UseMessageRetry(p => p.Interval(3, 100));
+        e.Consumer<CompensateBookCarListener>();
+    });
+
+    cfg.ReceiveEndpoint("compensate-book-hotel", e =>
+    {
+        e.PrefetchCount = 10;
+        e.UseMessageRetry(p => p.Interval(3, 100));
+        e.Consumer<CompensateBookHotelListener>();
+    });
+
+    cfg.ReceiveEndpoint("compensate-book-flight", e =>
+    {
+        e.PrefetchCount = 10;
+        e.UseMessageRetry(p => p.Interval(3, 100));
+        e.Consumer<CompensateBookFlightListener>();
+    });
 });
 
 var source = new CancellationTokenSource(TimeSpan.FromSeconds(10));
