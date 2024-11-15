@@ -1,19 +1,19 @@
 ﻿namespace OrchestratedSaga.Worker.Listeners;
 
-public class CreateBookHotelListener : IConsumer<BookHotelMessage>
+public class BookHotelListener : IConsumer<BookHotelMessage>
 {
-    private readonly ILogger<CreateBookHotelListener> _logger;
+    private readonly ILogger<BookHotelListener> _logger;
     private readonly IAction _action;
 
-    public CreateBookHotelListener(
-        ILogger<CreateBookHotelListener> logger,
+    public BookHotelListener(
+        ILogger<BookHotelListener> logger,
         [FromKeyedServices(nameof(BookHotelAction))] IAction action)
     {
         _logger = logger;
         _action = action;
     }
 
-    public CreateBookHotelListener()
+    public BookHotelListener()
     {
         
     }

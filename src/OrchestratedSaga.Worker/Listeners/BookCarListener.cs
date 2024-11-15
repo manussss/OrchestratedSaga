@@ -1,19 +1,19 @@
 ﻿namespace OrchestratedSaga.Worker.Listeners;
 
-public class CreateBookCarListener : IConsumer<BookCarMessage>
+public class BookCarListener : IConsumer<BookCarMessage>
 {
-    private readonly ILogger<CreateBookCarListener> _logger;
+    private readonly ILogger<BookCarListener> _logger;
     private readonly IAction _action;
 
-    public CreateBookCarListener(
-        ILogger<CreateBookCarListener> logger, 
+    public BookCarListener(
+        ILogger<BookCarListener> logger, 
         [FromKeyedServices(nameof(BookCarAction))] IAction action)
     {
         _logger = logger;
         _action = action;
     }
 
-    public CreateBookCarListener()
+    public BookCarListener()
     {
         
     }

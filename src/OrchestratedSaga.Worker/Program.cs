@@ -8,14 +8,14 @@ var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
     {
         e.PrefetchCount = 10;
         e.UseMessageRetry(p => p.Interval(3, 100));
-        e.Consumer<CreateBookCarListener>();
+        e.Consumer<BookCarListener>();
     });
 
     cfg.ReceiveEndpoint("book-hotel", e =>
     {
         e.PrefetchCount = 10;
         e.UseMessageRetry(p => p.Interval(3, 100));
-        e.Consumer<CreateBookHotelListener>();
+        e.Consumer<BookHotelListener>();
     });
 });
 
