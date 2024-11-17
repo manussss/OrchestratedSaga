@@ -3,6 +3,7 @@
 public interface IBookingTravelRepository
 {
     Task AddAsync(BookingTravel entity);
-    Task EditAsync(BookingTravel entity);
-    Task<BookingTravel?> GetByIdAsync(Guid id);
+    Task<IEnumerable<BookingTravel>> GetAllAsync();
+    Task UpdateAsync(BookingTravel entity, SagaEvent sagaEvent);
+    Task<BookingTravel?> GetByIdAsync(string rowKey);
 }
