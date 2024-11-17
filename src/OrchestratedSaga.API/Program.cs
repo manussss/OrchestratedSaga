@@ -5,6 +5,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddMassTransitInjection(builder.Configuration);
 builder.Services.AddRepositoriesInjection();
 builder.Services.AddLogging();
+builder.Services.AddSettingsInjection(builder.Configuration);
 
 var app = builder.Build();
 
@@ -22,32 +23,39 @@ app.MapPost("api/v1/message", async (
     [FromServices] IBookingTravelRepository bookingTravelRepository,
     [FromServices] ILogger<Program> logger) =>
 {
-    var bookingTravel = new BookingTravel
-    {
-        Id = Guid.NewGuid(),
-        CreatedAt = DateTime.UtcNow
-    };
+    var bookingTravel = new BookingTravel();
 
     await bookingTravelRepository.AddAsync(bookingTravel);
 
-    logger.LogInformation("Booking travel created, Id: {Id}", bookingTravel.Id);
+    logger.LogInformation("Booking travel created, Id: {Id}", bookingTravel.RowKey);
 
-    await publisher.Publish(new BookCarMessage(bookingTravel.Id));
+    await publisher.Publish(new BookCarMessage(bookingTravel.RowKey));
     logger.LogInformation("Event sent {Event}", nameof(BookCarMessage));
 
     return TypedResults.Ok();
 });
 
-app.MapGet("api/v1/message/{id}", async (
+app.MapGet("api/v1/message/{rowKey}", async (
     [FromServices] IBookingTravelRepository bookingTravelRepository,
-    Guid id) =>
+    string rowKey) =>
 {
-    var bookingTravel = await bookingTravelRepository.GetByIdAsync(id);
+    var bookingTravel = await bookingTravelRepository.GetByIdAsync(rowKey);
 
     if (bookingTravel == null)
         return Results.NotFound();
 
     return Results.Ok(bookingTravel);
+});
+
+app.MapGet("api/v1/message", async (
+    [FromServices] IBookingTravelRepository bookingTravelRepository) =>
+{
+    var bookingTravels = await bookingTravelRepository.GetAllAsync();
+
+    if (bookingTravels == null)
+        return Results.NotFound();
+
+    return Results.Ok(bookingTravels);
 });
 
 app.Run();
