@@ -15,4 +15,5 @@ global using Serilog;
 global using Serilog.Events;
 global using Serilog.Exceptions;
 global using Serilog.Filters;
+global using System.Runtime.Serialization;
 global using System.Text.Json;

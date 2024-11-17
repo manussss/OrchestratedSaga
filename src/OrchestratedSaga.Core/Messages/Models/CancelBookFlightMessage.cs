@@ -1,3 +1,3 @@
 ﻿namespace OrchestratedSaga.Core.Messages.Models;
 
-public record CancelBookFlightMessage(Guid BookingTravelId) : IMessage;
+public record CancelBookFlightMessage(string RowKey) : IMessage;

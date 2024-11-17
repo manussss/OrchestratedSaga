@@ -1,3 +1,3 @@
 ﻿namespace OrchestratedSaga.Core.Messages.Models;
 
-public record ReplyMessage(Guid BookingTravelId, EventType Type) : IMessage;
+public record ReplyMessage(string RowKey, EventType Type) : IMessage;

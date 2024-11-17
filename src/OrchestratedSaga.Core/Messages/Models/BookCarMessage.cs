@@ -1,3 +1,3 @@
 ﻿namespace OrchestratedSaga.Core.Messages.Models;
 
-public record BookCarMessage(Guid BookingTravelId) : IMessage;
+public record BookCarMessage(string RowKey) : IMessage;
