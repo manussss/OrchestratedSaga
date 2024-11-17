@@ -10,6 +10,7 @@ builder.Services.AddScoped<OrchestratorListener>();
 builder.Services.AddScoped<CompensateBookCarListener>();
 builder.Services.AddScoped<CompensateBookFlightListener>();
 builder.Services.AddScoped<CompensateBookHotelListener>();
+builder.Services.AddSettingsInjection(builder.Configuration);
 
 var host = builder.Build();
 

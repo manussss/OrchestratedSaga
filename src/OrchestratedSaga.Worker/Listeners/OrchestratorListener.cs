@@ -3,7 +3,7 @@
 public class OrchestratorListener : IConsumer<ReplyMessage>
 {
     private readonly IBookingTravelRepository _bookingTravelRepository;
-    private readonly  IPublishEndpoint _publishEndpoint;
+    private readonly IPublishEndpoint _publishEndpoint;
 
     public OrchestratorListener(IServiceProvider serviceProvider)
     {
@@ -13,11 +13,11 @@ public class OrchestratorListener : IConsumer<ReplyMessage>
 
     public async Task Consume(ConsumeContext<ReplyMessage> context)
     {
-        Serilog.Log.Information("{Class} | Processing {Event}", nameof(OrchestratorListener), nameof(BookCarMessage));
+        Serilog.Log.Information("{Class} | Processing {Event}", nameof(OrchestratorListener), context.Message.Type.ToString());
 
         var message = context.Message;
 
-        var bookingTravel = await _bookingTravelRepository.GetByIdAsync(message!.BookingTravelId);
+        var bookingTravel = await _bookingTravelRepository.GetByIdAsync(message!.RowKey);
 
         if (bookingTravel is null)
             return;
@@ -52,52 +52,105 @@ public class OrchestratorListener : IConsumer<ReplyMessage>
 
     private async Task HandleBookCarCompletedAsync(BookingTravel bookingTravel)
     {
-        Serilog.Log.Information("Entity Id {id} - book car completed", bookingTravel.Id);
+        Serilog.Log.Information("Entity Id {id} - book car completed", bookingTravel.RowKey);
 
-        bookingTravel.AddEvent(EventType.BookCarCompleted);
+        await _bookingTravelRepository.UpdateAsync(bookingTravel, new SagaEvent
+        {
+            EventId = Guid.NewGuid().ToString(),
+            EventType = EventType.BookCarCompleted.ToString(),
+            Timestamp = DateTime.UtcNow,
+            Payload = new Dictionary<string, object>
+            {
+                { "BookingTravel", bookingTravel.RowKey }
+            }
+        });
 
-        await _publishEndpoint.Publish(new BookHotelMessage(bookingTravel.Id));
+        await _publishEndpoint.Publish(new BookHotelMessage(bookingTravel.RowKey));
     }
 
     private async Task HandleBookHotelCompletedAsync(BookingTravel bookingTravel)
     {
-        Serilog.Log.Information("Entity Id {id} - book hotel completed", bookingTravel.Id);
+        Serilog.Log.Information("Entity Id {id} - book hotel completed", bookingTravel.RowKey);
 
-        bookingTravel.AddEvent(EventType.BookHotelCompleted);
+        await _bookingTravelRepository.UpdateAsync(bookingTravel, new SagaEvent
+        {
+            EventId = Guid.NewGuid().ToString(),
+            EventType = EventType.BookHotelCompleted.ToString(),
+            Timestamp = DateTime.UtcNow,
+            Payload = new Dictionary<string, object>
+            {
+                { "BookingTravel", bookingTravel.RowKey }
+            }
+        });
 
-        await _publishEndpoint.Publish(new BookFlightMessage(bookingTravel.Id));
+        await _publishEndpoint.Publish(new BookFlightMessage(bookingTravel.RowKey));
     }
 
     private async Task HandleBookFlightCompletedAsync(BookingTravel bookingTravel)
     {
-        Serilog.Log.Information("Entity Id {id} - book flight completed", bookingTravel.Id);
+        Serilog.Log.Information("Entity Id {id} - book flight completed", bookingTravel.RowKey);
 
-        bookingTravel.AddEvent(EventType.BookFlightCompleted);
+        await _bookingTravelRepository.UpdateAsync(bookingTravel, new SagaEvent
+        {
+            EventId = Guid.NewGuid().ToString(),
+            EventType = EventType.BookFlightCompleted.ToString(),
+            Timestamp = DateTime.UtcNow,
+            Payload = new Dictionary<string, object>
+            {
+                { "BookingTravel", bookingTravel.RowKey }
+            }
+        });
     }
 
     private async Task HandleBookCarCompensatedAsync(BookingTravel bookingTravel)
     {
-        Serilog.Log.Information("Entity Id {id} - book car compensated", bookingTravel.Id);
+        Serilog.Log.Information("Entity Id {id} - book car compensated", bookingTravel.RowKey);
 
-        bookingTravel.AddEvent(EventType.BookCarCompensated);
+        await _bookingTravelRepository.UpdateAsync(bookingTravel, new SagaEvent
+        {
+            EventId = Guid.NewGuid().ToString(),
+            EventType = EventType.BookCarCompensated.ToString(),
+            Timestamp = DateTime.UtcNow,
+            Payload = new Dictionary<string, object>
+            {
+                { "BookingTravel", bookingTravel.RowKey }
+            }
+        });
     }
 
     private async Task HandleBookHotelCompensatedAsync(BookingTravel bookingTravel)
     {
-        Serilog.Log.Information("Entity Id {id} - book hotel compensated", bookingTravel.Id);
+        Serilog.Log.Information("Entity Id {id} - book hotel compensated", bookingTravel.RowKey);
 
-        bookingTravel.AddEvent(EventType.BookHotelCompensated);
+        await _bookingTravelRepository.UpdateAsync(bookingTravel, new SagaEvent
+        {
+            EventId = Guid.NewGuid().ToString(),
+            EventType = EventType.BookHotelCompensated.ToString(),
+            Timestamp = DateTime.UtcNow,
+            Payload = new Dictionary<string, object>
+            {
+                { "BookingTravel", bookingTravel.RowKey }
+            }
+        });
 
-        await _publishEndpoint.Publish(new CancelBookCarMessage(bookingTravel.Id));
-
+        await _publishEndpoint.Publish(new CancelBookCarMessage(bookingTravel.RowKey));
     }
 
     private async Task HandleBookFlightCompensatedAsync(BookingTravel bookingTravel)
     {
-        Serilog.Log.Information("Entity Id {id} - book flight compensated", bookingTravel.Id);
+        Serilog.Log.Information("Entity Id {id} - book flight compensated", bookingTravel.RowKey);
 
-        bookingTravel.AddEvent(EventType.BookFlightCompensated);
+        await _bookingTravelRepository.UpdateAsync(bookingTravel, new SagaEvent
+        {
+            EventId = Guid.NewGuid().ToString(),
+            EventType = EventType.BookFlightCompensated.ToString(),
+            Timestamp = DateTime.UtcNow,
+            Payload = new Dictionary<string, object>
+            {
+                { "BookingTravel", bookingTravel.RowKey }
+            }
+        });
 
-        await _publishEndpoint.Publish(new CancelBookHotelMessage(bookingTravel.Id));
+        await _publishEndpoint.Publish(new CancelBookHotelMessage(bookingTravel.RowKey));
     }
 }
